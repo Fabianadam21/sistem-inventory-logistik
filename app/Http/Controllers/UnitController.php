@@ -1,0 +1,54 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Unit;
+use Illuminate\Http\Request;
+
+class UnitController extends Controller
+{
+    public function index()
+    {
+        $units = Unit::orderBy('name')->get();
+
+        return view('units.index', compact('units'));
+    }
+
+    public function create()
+    {
+        return view('units.create');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:units,name',
+        ]);
+
+        Unit::create($validated);
+
+        return redirect()
+            ->route('units.index')
+            ->with('success', 'Satuan berhasil ditambahkan.');
+    }
+
+    public function show(Unit $unit)
+    {
+        //
+    }
+
+    public function edit(Unit $unit)
+    {
+        //
+    }
+
+    public function update(Request $request, Unit $unit)
+    {
+        //
+    }
+
+    public function destroy(Unit $unit)
+    {
+        //
+    }
+}
