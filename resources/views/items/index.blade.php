@@ -38,6 +38,29 @@
             text-decoration: none;
         }
 
+        .btn-edit {
+            background: #f59e0b;
+            color: white;
+            padding: 7px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .btn-delete {
+            background: #dc2626;
+            color: white;
+            padding: 7px 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .btn-delete:hover {
+            background: #b91c1c;
+        }
+
         table {
             width: 100%;
             background: white;
@@ -111,9 +134,26 @@
                     <td>{{ $item->stock }}</td>
 
                     <td>
-                        <a href="{{ route('items.edit', $item) }}">
+                        <a
+                            href="{{ route('items.edit', $item->id) }}"
+                            class="btn btn-edit"
+                        >
                             Edit
                         </a>
+
+                        <form
+                            action="{{ route('items.destroy', $item->id) }}"
+                            method="POST"
+                            style="display:inline;"
+                            onsubmit="return confirm('Yakin ingin menghapus barang ini?')"
+                        >
+                            @csrf
+                            @method('DELETE')
+
+                            <button type="submit" class="btn btn-delete">
+                                Hapus
+                            </button>
+                        </form>
                     </td>
                 </tr>
 
