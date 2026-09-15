@@ -1,157 +1,91 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Satuan - SIMLOG</title>
+@extends('layouts.app')
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+@section('title', 'Tambah Satuan')
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
-            color: #1f2937;
-        }
+@section('content')
 
-        .container {
-            max-width: 700px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
+<div class="page-header">
 
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        h1 {
-            margin-top: 0;
-            margin-bottom: 5px;
-        }
-
-        .subtitle {
-            color: #6b7280;
-            margin-bottom: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #2563eb;
-        }
-
-        .buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
-        }
-
-        .btn {
-            padding: 11px 18px;
-            border-radius: 8px;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .btn-primary {
-            background: #2563eb;
-            color: white;
-        }
-
-        .btn-secondary {
-            background: #e5e7eb;
-            color: #374151;
-        }
-
-        .error {
-            color: #dc2626;
-            font-size: 13px;
-            margin-top: 5px;
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="container">
-
-    <div class="card">
-
+    <div>
         <h1>Tambah Satuan</h1>
 
-        <p class="subtitle">
-            Tambahkan satuan baru untuk barang inventory.
-        </p>
-
-        <form action="{{ route('units.store') }}" method="POST">
-
-            @csrf
-
-            <div class="form-group">
-
-                <label for="name">
-                    Nama Satuan
-                </label>
-
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value="{{ old('name') }}"
-                    placeholder="Contoh: Buah"
-                    required
-                >
-
-                @error('name')
-                    <div class="error">
-                        {{ $message }}
-                    </div>
-                @enderror
-
-            </div>
-
-            <div class="buttons">
-
-                <button type="submit" class="btn btn-primary">
-                    Simpan Satuan
-                </button>
-
-                <a href="{{ route('units.index') }}" class="btn btn-secondary">
-                    Kembali
-                </a>
-
-            </div>
-
-        </form>
-
+        <div class="subtitle">
+            Tambahkan satuan barang baru
+        </div>
     </div>
+
+    <a
+        href="{{ route('units.index') }}"
+        class="btn btn-secondary"
+    >
+        ← Kembali
+    </a>
 
 </div>
 
-</body>
-</html>
+@if ($errors->any())
+
+    <div class="alert alert-error">
+
+        <strong>Terjadi kesalahan:</strong>
+
+        <ul style="margin: 8px 0 0 18px;">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+
+    </div>
+
+@endif
+
+<div class="card">
+
+    <form
+        action="{{ route('units.store') }}"
+        method="POST"
+    >
+
+        @csrf
+
+        <div class="form-group">
+
+            <label for="name">
+                Nama Satuan
+            </label>
+
+            <input
+                type="text"
+                id="name"
+                name="name"
+                class="form-control"
+                value="{{ old('name') }}"
+                placeholder="Contoh: Pcs"
+                required
+            >
+
+        </div>
+
+        <div class="actions">
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                Simpan Satuan
+            </button>
+
+            <a
+                href="{{ route('units.index') }}"
+                class="btn btn-secondary"
+            >
+                Batal
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+@endsection

@@ -39,12 +39,20 @@ class UnitController extends Controller
 
     public function edit(Unit $unit)
     {
-        //
+        return view('units.edit', compact('unit'));
     }
 
     public function update(Request $request, Unit $unit)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:units,name,' . $unit->id,
+        ]);
+
+        $unit->update($validated);
+
+        return redirect()
+            ->route('units.index')
+            ->with('success', 'Satuan berhasil diperbarui.');
     }
 
     public function destroy(Unit $unit)

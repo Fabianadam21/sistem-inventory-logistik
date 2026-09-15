@@ -1,489 +1,438 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@section('title', 'Tambah Barang Masuk')
 
-    <title>Tambah Barang Masuk - SIMLOG</title>
+@section('content')
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<div class="page-header">
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
-            color: #1f2937;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,.05);
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            margin-top: 0;
-            margin-bottom: 5px;
-        }
-
-        .subtitle {
-            color: #6b7280;
-            margin-bottom: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        input,
-        select,
-        textarea {
-            width: 100%;
-            padding: 11px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        textarea {
-            min-height: 90px;
-            resize: vertical;
-        }
-
-        input:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #2563eb;
-        }
-
-        .row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .detail-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-
-        .detail-table th,
-        .detail-table td {
-            padding: 10px;
-            border: 1px solid #e5e7eb;
-        }
-
-        .detail-table th {
-            background: #f9fafb;
-            text-align: left;
-        }
-
-        .detail-table input,
-        .detail-table select {
-            width: 100%;
-        }
-
-        .btn {
-            padding: 10px 16px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        .btn-primary {
-            background: #2563eb;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #1d4ed8;
-        }
-
-        .btn-secondary {
-            background: #e5e7eb;
-            color: #374151;
-        }
-
-        .btn-danger {
-            background: #dc2626;
-            color: white;
-        }
-
-        .actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
-        }
-
-        .error {
-            color: #dc2626;
-            font-size: 13px;
-            margin-top: 5px;
-        }
-
-        .add-row {
-            margin-top: 15px;
-        }
-
-        @media (max-width: 700px) {
-            .row {
-                grid-template-columns: 1fr;
-            }
-
-            .detail-table {
-                display: block;
-                overflow-x: auto;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="container">
-
-    <div class="card">
-
+    <div>
         <h1>Tambah Barang Masuk</h1>
 
-        <p class="subtitle">
-            Input transaksi barang yang masuk ke gudang.
-        </p>
-
-        <form
-            action="{{ route('incoming-transactions.store') }}"
-            method="POST"
-        >
-
-            @csrf
-
-            <div class="row">
-
-                <div class="form-group">
-
-                    <label for="transaction_number">
-                        No. Transaksi
-                    </label>
-
-                    <input
-                        type="text"
-                        id="transaction_number"
-                        name="transaction_number"
-                        value="{{ old('transaction_number') }}"
-                        placeholder="Contoh: BM-001"
-                        required
-                    >
-
-                    @error('transaction_number')
-                        <div class="error">
-                            {{ $message }}
-                        </div>
-                    @enderror
-
-                </div>
-
-                <div class="form-group">
-
-                    <label for="date">
-                        Tanggal
-                    </label>
-
-                    <input
-                        type="date"
-                        id="date"
-                        name="date"
-                        value="{{ old('date', date('Y-m-d')) }}"
-                        required
-                    >
-
-                    @error('date')
-                        <div class="error">
-                            {{ $message }}
-                        </div>
-                    @enderror
-
-                </div>
-
-            </div>
-
-            <div class="form-group">
-
-                <label for="supplier_id">
-                    Supplier
-                </label>
-
-                <select
-                    id="supplier_id"
-                    name="supplier_id"
-                    required
-                >
-
-                    <option value="">
-                        -- Pilih Supplier --
-                    </option>
-
-                    @foreach($suppliers as $supplier)
-
-                        <option
-                            value="{{ $supplier->id }}"
-                            {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}
-                        >
-                            {{ $supplier->name }}
-                        </option>
-
-                    @endforeach
-
-                </select>
-
-                @error('supplier_id')
-                    <div class="error">
-                        {{ $message }}
-                    </div>
-                @enderror
-
-            </div>
-
-            <div class="form-group">
-
-                <label for="description">
-                    Keterangan
-                </label>
-
-                <textarea
-                    id="description"
-                    name="description"
-                    placeholder="Keterangan transaksi..."
-                >{{ old('description') }}</textarea>
-
-                @error('description')
-                    <div class="error">
-                        {{ $message }}
-                    </div>
-                @enderror
-
-            </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <h2>Detail Barang</h2>
-
-        <p class="subtitle">
-            Masukkan barang dan jumlah yang diterima.
-        </p>
-
-        <table class="detail-table">
-
-            <thead>
-                <tr>
-                    <th width="45%">Barang</th>
-                    <th width="20%">Jumlah</th>
-                    <th width="25%">Harga</th>
-                    <th width="10%">Aksi</th>
-                </tr>
-            </thead>
-
-            <tbody id="detail-container">
-
-                <tr>
-
-                    <td>
-
-                        <select
-                            name="items[0][item_id]"
-                            required
-                        >
-
-                            <option value="">
-                                -- Pilih Barang --
-                            </option>
-
-                            @foreach($items as $item)
-
-                                <option value="{{ $item->id }}">
-                                    {{ $item->code }} - {{ $item->name }}
-                                </option>
-
-                            @endforeach
-
-                        </select>
-
-                    </td>
-
-                    <td>
-
-                        <input
-                            type="number"
-                            name="items[0][quantity]"
-                            min="1"
-                            required
-                        >
-
-                    </td>
-
-                    <td>
-
-                        <input
-                            type="number"
-                            name="items[0][price]"
-                            min="0"
-                            step="0.01"
-                            placeholder="0"
-                        >
-
-                    </td>
-
-                    <td>
-                        -
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
-
-        <button
-            type="button"
-            class="btn btn-secondary add-row"
-            onclick="addRow()"
-        >
-            + Tambah Barang
-        </button>
-
-        <div class="actions">
-
-            <button
-                type="submit"
-                class="btn btn-primary"
-            >
-                Simpan Transaksi
-            </button>
-
-            <a
-                href="{{ route('incoming-transactions.index') }}"
-                class="btn btn-secondary"
-            >
-                Kembali
-            </a>
-
+        <div class="subtitle">
+            Input transaksi barang yang masuk ke gudang
         </div>
-
-        </form>
-
     </div>
+
+    <a
+        href="{{ route('incoming-transactions.index') }}"
+        class="btn btn-secondary"
+    >
+        ← Kembali
+    </a>
 
 </div>
 
 
-<script>
+@if ($errors->any())
 
-let rowIndex = 1;
+    <div class="alert alert-error">
 
-function addRow()
-{
-    const container =
-        document.getElementById('detail-container');
+        <strong>Terjadi kesalahan:</strong>
 
-    const row =
-        document.createElement('tr');
+        <ul style="margin: 8px 0 0 18px;">
 
-    row.innerHTML = `
-        <td>
+            @foreach ($errors->all() as $error)
+
+                <li>
+                    {{ $error }}
+                </li>
+
+            @endforeach
+
+        </ul>
+
+    </div>
+
+@endif
+
+
+<form
+    action="{{ route('incoming-transactions.store') }}"
+    method="POST"
+>
+
+    @csrf
+
+
+    <div class="card" style="margin-bottom: 20px;">
+
+        <h3 style="margin-top: 0;">
+            Informasi Transaksi
+        </h3>
+
+
+        <div class="form-group">
+
+            <label for="transaction_number">
+                No. Transaksi
+            </label>
+
+            <input
+                type="text"
+                id="transaction_number"
+                name="transaction_number"
+                class="form-control"
+                value="{{ old('transaction_number') }}"
+                placeholder="Contoh: BM-001"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="date">
+                Tanggal
+            </label>
+
+            <input
+                type="date"
+                id="date"
+                name="date"
+                class="form-control"
+                value="{{ old('date', date('Y-m-d')) }}"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="supplier_id">
+                Supplier
+            </label>
 
             <select
-                name="items[${rowIndex}][item_id]"
+                id="supplier_id"
+                name="supplier_id"
+                class="form-control"
                 required
             >
 
                 <option value="">
-                    -- Pilih Barang --
+                    -- Pilih Supplier --
                 </option>
 
-                @foreach($items as $item)
+                @foreach ($suppliers as $supplier)
 
-                    <option value="{{ $item->id }}">
-                        {{ $item->code }} - {{ $item->name }}
+                    <option
+                        value="{{ $supplier->id }}"
+                        {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}
+                    >
+                        {{ $supplier->name }}
                     </option>
 
                 @endforeach
 
             </select>
 
-        </td>
+        </div>
 
-        <td>
 
-            <input
-                type="number"
-                name="items[${rowIndex}][quantity]"
-                min="1"
-                required
-            >
+        <div class="form-group">
 
-        </td>
+            <label for="description">
+                Keterangan
+            </label>
 
-        <td>
+            <textarea
+                id="description"
+                name="description"
+                class="form-control"
+                rows="3"
+                placeholder="Keterangan transaksi (opsional)"
+            >{{ old('description') }}</textarea>
 
-            <input
-                type="number"
-                name="items[${rowIndex}][price]"
-                min="0"
-                step="0.01"
-                placeholder="0"
-            >
+        </div>
 
-        </td>
+    </div>
 
-        <td>
+
+    <div class="card">
+
+        <div
+            style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                margin-bottom:20px;
+            "
+        >
+
+            <div>
+
+                <h3 style="margin:0;">
+                    Detail Barang
+                </h3>
+
+                <div class="subtitle">
+                    Masukkan barang yang diterima
+                </div>
+
+            </div>
 
             <button
                 type="button"
-                class="btn btn-danger"
-                onclick="removeRow(this)"
+                class="btn btn-primary"
+                onclick="addRow()"
             >
-                Hapus
+                + Tambah Barang
             </button>
 
-        </td>
-    `;
+        </div>
 
-    container.appendChild(row);
 
-    rowIndex++;
-}
+        <div id="items-container">
 
-function removeRow(button)
-{
-    button.closest('tr').remove();
-}
+            <div class="detail-row">
+
+                <div class="form-group">
+
+                    <label>
+                        Barang
+                    </label>
+
+                    <select
+                        name="items[0][item_id]"
+                        class="form-control"
+                        required
+                    >
+
+                        <option value="">
+                            -- Pilih Barang --
+                        </option>
+
+                        @foreach ($items as $item)
+
+                            <option
+                                value="{{ $item->id }}"
+                            >
+                                {{ $item->name }}
+                            </option>
+
+                        @endforeach
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Jumlah
+                    </label>
+
+                    <input
+                        type="number"
+                        name="items[0][quantity]"
+                        class="form-control"
+                        min="1"
+                        placeholder="Jumlah"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Harga
+                    </label>
+
+                    <input
+                        type="number"
+                        name="items[0][price]"
+                        class="form-control"
+                        min="0"
+                        step="0.01"
+                        placeholder="Harga"
+                    >
+
+                </div>
+
+
+                <div style="display:flex; align-items:end; padding-bottom:18px;">
+
+                    <button
+                        type="button"
+                        class="btn btn-danger"
+                        onclick="removeRow(this)"
+                    >
+                        Hapus
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="actions"
+        style="margin-top:20px;"
+    >
+
+        <button
+            type="submit"
+            class="btn btn-primary"
+        >
+            Simpan Transaksi
+        </button>
+
+        <a
+            href="{{ route('incoming-transactions.index') }}"
+            class="btn btn-secondary"
+        >
+            Batal
+        </a>
+
+    </div>
+
+</form>
+
+
+<style>
+
+    .detail-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr auto;
+        gap: 15px;
+        padding: 18px;
+        margin-bottom: 15px;
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+    }
+
+    .detail-row .form-group {
+        margin-bottom: 0;
+    }
+
+    @media (max-width: 800px) {
+
+        .detail-row {
+            grid-template-columns: 1fr;
+        }
+
+    }
+
+</style>
+
+
+<script>
+
+    let rowIndex = 1;
+
+    function addRow()
+    {
+        const container = document.getElementById('items-container');
+
+        const row = document.createElement('div');
+
+        row.className = 'detail-row';
+
+        row.innerHTML = `
+            <div class="form-group">
+
+                <label>
+                    Barang
+                </label>
+
+                <select
+                    name="items[${rowIndex}][item_id]"
+                    class="form-control"
+                    required
+                >
+
+                    <option value="">
+                        -- Pilih Barang --
+                    </option>
+
+                    @foreach ($items as $item)
+
+                        <option value="{{ $item->id }}">
+                            {{ $item->name }}
+                        </option>
+
+                    @endforeach
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Jumlah
+                </label>
+
+                <input
+                    type="number"
+                    name="items[${rowIndex}][quantity]"
+                    class="form-control"
+                    min="1"
+                    placeholder="Jumlah"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Harga
+                </label>
+
+                <input
+                    type="number"
+                    name="items[${rowIndex}][price]"
+                    class="form-control"
+                    min="0"
+                    step="0.01"
+                    placeholder="Harga"
+                >
+
+            </div>
+
+            <div style="display:flex; align-items:end; padding-bottom:18px;">
+
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    onclick="removeRow(this)"
+                >
+                    Hapus
+                </button>
+
+            </div>
+        `;
+
+        container.appendChild(row);
+
+        rowIndex++;
+    }
+
+
+    function removeRow(button)
+    {
+        const rows = document.querySelectorAll('.detail-row');
+
+        if (rows.length <= 1) {
+            alert('Minimal harus ada satu barang.');
+            return;
+        }
+
+        button.closest('.detail-row').remove();
+    }
 
 </script>
 
-</body>
-
-</html>
+@endsection

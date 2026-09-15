@@ -32,23 +32,36 @@ class SupplierController extends Controller
             ->with('success', 'Supplier berhasil ditambahkan.');
     }
 
-    public function show(Supplier $supplier)
-    {
-        //
-    }
-
     public function edit(Supplier $supplier)
     {
-        //
+        return view('suppliers.edit', compact('supplier'));
     }
 
     public function update(Request $request, Supplier $supplier)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:suppliers,name,' . $supplier->id,
+        ]);
+
+        $supplier->update($validated);
+
+        return redirect()
+            ->route('suppliers.index')
+            ->with('success', 'Supplier berhasil diperbarui.');
     }
 
     public function destroy(Supplier $supplier)
     {
-        //
+        if ($supplier->incomingTransactions()->exists()) {
+            return redirect()
+                ->route('suppliers.index')
+                ->with('error', 'Supplier tidak dapat dihapus karena sudah digunakan dalam transaksi Barang Masuk.');
+        }
+
+        $supplier->delete();
+
+        return redirect()
+            ->route('suppliers.index')
+            ->with('success', 'Supplier berhasil dihapus.');
     }
 }

@@ -9,10 +9,11 @@ use App\Http\Controllers\IncomingTransactionController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\OutgoingTransactionController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ReportController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [DashboardController::class, 'index'])
+    ->name('dashboard');
 
 Route::resource(
     'incoming-transactions',
@@ -29,3 +30,7 @@ Route::resource(
     OutgoingTransactionController::class
 );
 Route::resource('departments', DepartmentController::class);
+Route::get(
+    '/reports/stock',
+    [ReportController::class, 'stock']
+)->name('reports.stock');

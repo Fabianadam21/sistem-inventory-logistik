@@ -39,12 +39,21 @@ class WarehouseController extends Controller
 
     public function edit(Warehouse $warehouse)
     {
-        //
+        return view('warehouses.edit', compact('warehouse'));
     }
 
     public function update(Request $request, Warehouse $warehouse)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'location' => 'nullable|string|max:255',
+        ]);
+
+        $warehouse->update($validated);
+
+        return redirect()
+            ->route('warehouses.index')
+            ->with('success', 'Gudang berhasil diperbarui.');
     }
 
     public function destroy(Warehouse $warehouse)

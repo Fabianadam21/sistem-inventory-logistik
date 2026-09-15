@@ -1,161 +1,52 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@section('title', 'Supplier')
 
-    <title>Supplier - SIMLOG</title>
+@section('content')
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<div class="page-header">
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
-            color: #1f2937;
-        }
+    <div>
+        <h1>Supplier</h1>
 
-        .container {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .header h1 {
-            margin: 0 0 5px;
-            font-size: 28px;
-        }
-
-        .header p {
-            margin: 0;
-            color: #6b7280;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 10px 16px;
-            border-radius: 8px;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .btn-primary {
-            background: #2563eb;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #1d4ed8;
-        }
-
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 14px;
-            text-align: left;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        th {
-            background: #f9fafb;
-            font-size: 14px;
-        }
-
-        td {
-            font-size: 14px;
-        }
-
-        .empty {
-            text-align: center;
-            color: #6b7280;
-            padding: 30px;
-        }
-
-        .alert {
-            background: #dcfce7;
-            color: #166534;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        @media (max-width: 600px) {
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="container">
-
-    <div class="header">
-
-        <div>
-            <h1>Supplier</h1>
-
-            <p>
-                Kelola data supplier barang
-            </p>
+        <div class="subtitle">
+            Kelola data supplier barang
         </div>
-
-        <a
-            href="{{ route('suppliers.create') }}"
-            class="btn btn-primary"
-        >
-            + Tambah Supplier
-        </a>
-
     </div>
 
-    @if(session('success'))
+    <a
+        href="{{ route('suppliers.create') }}"
+        class="btn btn-primary"
+    >
+        + Tambah Supplier
+    </a>
 
-        <div class="alert">
-            {{ session('success') }}
-        </div>
+</div>
 
-    @endif
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 
-    <div class="card">
+@if(session('error'))
+    <div class="alert alert-error">
+        {{ session('error') }}
+    </div>
+@endif
+
+<div class="card">
+
+    <div class="table-wrapper">
 
         <table>
 
             <thead>
-
                 <tr>
-                    <th width="80">No</th>
+                    <th>No</th>
                     <th>Nama Supplier</th>
-                    <th width="150">Aksi</th>
+                    <th>Aksi</th>
                 </tr>
-
             </thead>
 
             <tbody>
@@ -173,9 +64,36 @@
                         </td>
 
                         <td>
-                            <span style="color:#6b7280;">
-                                -
-                            </span>
+
+                            <div class="actions">
+
+                                <a
+                                    href="{{ route('suppliers.edit', $supplier->id) }}"
+                                    class="btn btn-warning"
+                                >
+                                    Edit
+                                </a>
+
+                                <form
+                                    action="{{ route('suppliers.destroy', $supplier->id) }}"
+                                    method="POST"
+                                    onsubmit="return confirm('Yakin ingin menghapus supplier ini?')"
+                                >
+
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-danger"
+                                    >
+                                        Hapus
+                                    </button>
+
+                                </form>
+
+                            </div>
+
                         </td>
 
                     </tr>
@@ -183,14 +101,12 @@
                 @empty
 
                     <tr>
-
                         <td
                             colspan="3"
-                            class="empty"
+                            style="text-align:center; padding:40px;"
                         >
                             Belum ada data supplier.
                         </td>
-
                     </tr>
 
                 @endforelse
@@ -203,6 +119,4 @@
 
 </div>
 
-</body>
-
-</html>
+@endsection

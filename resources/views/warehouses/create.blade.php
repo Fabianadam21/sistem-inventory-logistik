@@ -1,157 +1,108 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Gudang - SIMLOG</title>
+@extends('layouts.app')
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+@section('title', 'Tambah Gudang')
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
-            color: #1f2937;
-        }
+@section('content')
 
-        .container {
-            max-width: 700px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
+<div class="page-header">
 
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        h1 {
-            margin-top: 0;
-            margin-bottom: 5px;
-        }
-
-        .subtitle {
-            color: #6b7280;
-            margin-bottom: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #2563eb;
-        }
-
-        .buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
-        }
-
-        .btn {
-            padding: 11px 18px;
-            border-radius: 8px;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .btn-primary {
-            background: #2563eb;
-            color: white;
-        }
-
-        .btn-secondary {
-            background: #e5e7eb;
-            color: #374151;
-        }
-
-        .error {
-            color: #dc2626;
-            font-size: 13px;
-            margin-top: 5px;
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="container">
-
-    <div class="card">
-
+    <div>
         <h1>Tambah Gudang</h1>
 
-        <p class="subtitle">
-            Tambahkan lokasi gudang baru untuk inventory.
-        </p>
-
-        <form action="{{ route('warehouses.store') }}" method="POST">
-
-            @csrf
-
-            <div class="form-group">
-
-                <label for="name">
-                    Nama Gudang
-                </label>
-
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value="{{ old('name') }}"
-                    placeholder="Contoh: Gudang Utama"
-                    required
-                >
-
-                @error('name')
-                    <div class="error">
-                        {{ $message }}
-                    </div>
-                @enderror
-
-            </div>
-
-            <div class="buttons">
-
-                <button type="submit" class="btn btn-primary">
-                    Simpan Gudang
-                </button>
-
-                <a href="{{ route('warehouses.index') }}" class="btn btn-secondary">
-                    Kembali
-                </a>
-
-            </div>
-
-        </form>
-
+        <div class="subtitle">
+            Tambahkan data gudang baru
+        </div>
     </div>
+
+    <a
+        href="{{ route('warehouses.index') }}"
+        class="btn btn-secondary"
+    >
+        ← Kembali
+    </a>
 
 </div>
 
-</body>
-</html>
+@if ($errors->any())
+
+    <div class="alert alert-error">
+
+        <strong>Terjadi kesalahan:</strong>
+
+        <ul style="margin: 8px 0 0 18px;">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+
+    </div>
+
+@endif
+
+<div class="card">
+
+    <form
+        action="{{ route('warehouses.store') }}"
+        method="POST"
+    >
+
+        @csrf
+
+        <div class="form-group">
+
+            <label for="name">
+                Nama Gudang
+            </label>
+
+            <input
+                type="text"
+                id="name"
+                name="name"
+                class="form-control"
+                value="{{ old('name') }}"
+                placeholder="Contoh: Gudang Utama"
+                required
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="location">
+                Lokasi
+            </label>
+
+            <input
+                type="text"
+                id="location"
+                name="location"
+                class="form-control"
+                value="{{ old('location') }}"
+                placeholder="Contoh: Gedung A Lantai 1"
+            >
+
+        </div>
+
+        <div class="actions">
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                Simpan Gudang
+            </button>
+
+            <a
+                href="{{ route('warehouses.index') }}"
+                class="btn btn-secondary"
+            >
+                Batal
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+@endsection

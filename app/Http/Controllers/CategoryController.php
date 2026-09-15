@@ -32,11 +32,6 @@ class CategoryController extends Controller
             ->with('success', 'Kategori berhasil ditambahkan.');
     }
 
-    public function show(Category $category)
-    {
-        return view('categories.show', compact('category'));
-    }
-
     public function edit(Category $category)
     {
         return view('categories.edit', compact('category'));

@@ -1,139 +1,91 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@section('title', 'Tambah Unit / Bidang')
 
-    <title>Tambah Unit / Bidang</title>
+@section('content')
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
-            margin: 0;
-            padding: 40px;
-        }
+<div class="page-header">
 
-        .container {
-            max-width: 700px;
-            margin: auto;
-        }
+    <div>
+        <h1>Tambah Unit / Bidang</h1>
 
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
+        <div class="subtitle">
+            Tambahkan unit atau bidang kerja baru
+        </div>
+    </div>
 
-        h1 {
-            margin-top: 0;
-        }
+    <a
+        href="{{ route('departments.index') }}"
+        class="btn btn-secondary"
+    >
+        ← Kembali
+    </a>
 
-        label {
-            display: block;
-            margin-bottom: 7px;
-            font-weight: bold;
-        }
+</div>
 
-        input {
-            width: 100%;
-            padding: 11px;
-            border: 1px solid #d1d5db;
-            border-radius: 7px;
-            margin-bottom: 18px;
-        }
+@if ($errors->any())
 
-        .btn {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 7px;
-            text-decoration: none;
-            cursor: pointer;
-        }
+    <div class="alert alert-error">
 
-        .btn-primary {
-            background: #2563eb;
-            color: white;
-        }
+        <strong>Terjadi kesalahan:</strong>
 
-        .btn-secondary {
-            background: #6b7280;
-            color: white;
-        }
+        <ul style="margin: 8px 0 0 18px;">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
 
-        .error {
-            background: #fee2e2;
-            color: #991b1b;
-            padding: 12px;
-            border-radius: 7px;
-            margin-bottom: 20px;
-        }
-    </style>
-</head>
+    </div>
 
-<body>
+@endif
 
-<div class="container">
+<div class="card">
 
-    <h1>Tambah Unit / Bidang</h1>
+    <form
+        action="{{ route('departments.store') }}"
+        method="POST"
+    >
 
-    <div class="card">
+        @csrf
 
-        @if($errors->any())
+        <div class="form-group">
 
-            <div class="error">
-
-                <ul>
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-
-            </div>
-
-        @endif
-
-        <form
-            action="{{ route('departments.store') }}"
-            method="POST"
-        >
-
-            @csrf
-
-            <label>
+            <label for="name">
                 Nama Unit / Bidang
             </label>
 
             <input
                 type="text"
+                id="name"
                 name="name"
+                class="form-control"
                 value="{{ old('name') }}"
                 placeholder="Contoh: Sekretariat"
                 required
             >
 
+        </div>
+
+        <div class="actions">
+
             <button
                 type="submit"
                 class="btn btn-primary"
             >
-                Simpan
+                Simpan Unit/Bidang
             </button>
 
             <a
                 href="{{ route('departments.index') }}"
                 class="btn btn-secondary"
             >
-                Kembali
+                Batal
             </a>
 
-        </form>
+        </div>
 
-    </div>
+    </form>
 
 </div>
 
-</body>
-
-</html>
+@endsection

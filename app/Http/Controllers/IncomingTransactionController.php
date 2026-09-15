@@ -92,7 +92,15 @@ class IncomingTransactionController extends Controller
 
     public function show(IncomingTransaction $incomingTransaction)
     {
-        //
+        $incomingTransaction->load([
+            'supplier',
+            'details.item'
+        ]);
+
+        return view(
+            'incoming_transactions.show',
+            compact('incomingTransaction')
+        );
     }
 
     public function edit(IncomingTransaction $incomingTransaction)
