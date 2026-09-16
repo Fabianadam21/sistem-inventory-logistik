@@ -10,13 +10,27 @@ class ItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $items = \App\Models\Item::with([
+        $query = Item::with([
             'category',
             'unit',
             'warehouse'
-        ])->latest()->get();
+        ]);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")
+                    ->orWhere('name', 'like', "%{$search}%");
+            });
+        }
+
+        $items = $query
+            ->orderBy('name')
+            ->paginate(10)
+            ->withQueryString();
 
         return view('items.index', compact('items'));
     }
@@ -65,14 +79,14 @@ class ItemController extends Controller
      * Display the specified resource.
      */
     public function show(string $id)
-        {
-            //
-        }
+    {
+        //
+    }
 
-        /**
-         * Show the form for editing the specified resource.
-         */
-        public function edit(Item $item)
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Item $item)
     {
         $categories = \App\Models\Category::orderBy('name')->get();
         $units = \App\Models\Unit::orderBy('name')->get();

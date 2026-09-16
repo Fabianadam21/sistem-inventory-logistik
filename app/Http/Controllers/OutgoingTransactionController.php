@@ -10,14 +10,23 @@ use Illuminate\Support\Facades\DB;
 
 class OutgoingTransactionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $transactions = OutgoingTransaction::with([
+        $query = OutgoingTransaction::with([
             'department',
             'details.item'
-        ])
-        ->latest('date')
-        ->get();
+        ]);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where('transaction_number', 'like', "%{$search}%");
+        }
+
+        $transactions = $query
+            ->latest('date')
+            ->paginate(10)
+            ->withQueryString();
 
         return view(
             'outgoing_transactions.index',

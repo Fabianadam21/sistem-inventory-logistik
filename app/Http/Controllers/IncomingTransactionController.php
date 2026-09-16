@@ -10,14 +10,23 @@ use Illuminate\Support\Facades\DB;
 
 class IncomingTransactionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $transactions = IncomingTransaction::with([
+        $query = IncomingTransaction::with([
             'supplier',
             'details.item'
-        ])
+        ]);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where('transaction_number', 'like', "%{$search}%");
+        }
+
+        $transactions = $query
             ->latest('date')
-            ->get();
+            ->paginate(10)
+            ->withQueryString();
 
         return view(
             'incoming_transactions.index',

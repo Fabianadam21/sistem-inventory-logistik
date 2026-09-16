@@ -320,6 +320,47 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
+
+            .pagination {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                gap: 5px;
+                margin-top: 20px;
+                flex-wrap: wrap;
+            }
+
+            .pagination a,
+            .pagination span {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 34px;
+                height: 34px;
+                padding: 0 10px;
+                border-radius: 7px;
+                text-decoration: none;
+                font-size: 13px;
+                border: 1px solid #e5e7eb;
+                background: white;
+                color: #475569;
+            }
+
+            .pagination a:hover {
+                background: #f1f5f9;
+            }
+
+            .pagination .page-active {
+                background: #2563eb;
+                color: white;
+                border-color: #2563eb;
+                font-weight: 600;
+            }
+
+            .pagination .page-disabled {
+                color: #cbd5e1;
+                background: #f8fafc;
+            }
         }
     </style>
 </head>
@@ -400,6 +441,16 @@
 
                 <a href="{{ route('reports.stock') }}" class="{{ request()->routeIs('reports.*') ? 'active' : '' }}">
                     Laporan Stok
+                </a>
+
+                <a href="{{ route('reports.incoming') }}"
+                    class="{{ request()->routeIs('reports.incoming') ? 'active' : '' }}">
+                    Barang Masuk
+                </a>
+
+                <a href="{{ route('reports.outgoing') }}"
+                    class="{{ request()->routeIs('reports.outgoing') ? 'active' : '' }}">
+                    Barang Keluar
                 </a>
 
             </nav>
