@@ -381,6 +381,7 @@
 
             <nav class="menu">
 
+                {{-- UTAMA --}}
                 <div class="menu-title">
                     Utama
                 </div>
@@ -389,57 +390,82 @@
                     Dashboard
                 </a>
 
-                <div class="menu-title">
-                    Master Data
-                </div>
 
-                <a href="{{ route('items.index') }}" class="{{ request()->routeIs('items.*') ? 'active' : '' }}">
-                    Barang
-                </a>
+                {{-- MASTER DATA --}}
+                {{-- Hanya Admin dan Petugas --}}
+                @if(in_array(auth()->user()->role, ['admin', 'petugas']))
 
-                <a href="{{ route('categories.index') }}"
-                    class="{{ request()->routeIs('categories.*') ? 'active' : '' }}">
-                    Kategori
-                </a>
+                    <div class="menu-title">
+                        Master Data
+                    </div>
 
-                <a href="{{ route('units.index') }}" class="{{ request()->routeIs('units.*') ? 'active' : '' }}">
-                    Satuan
-                </a>
+                    @if(auth()->user()->role === 'admin')
 
-                <a href="{{ route('warehouses.index') }}"
-                    class="{{ request()->routeIs('warehouses.*') ? 'active' : '' }}">
-                    Gudang
-                </a>
+                        <div class="menu-title">
+                            Administrasi
+                        </div>
 
-                <a href="{{ route('suppliers.index') }}"
-                    class="{{ request()->routeIs('suppliers.*') ? 'active' : '' }}">
-                    Supplier
-                </a>
+                        <a href="{{ route('users.index') }}" class="{{ request()->routeIs('users.*') ? 'active' : '' }}">
+                            Manajemen User
+                        </a>
 
-                <a href="{{ route('departments.index') }}"
-                    class="{{ request()->routeIs('departments.*') ? 'active' : '' }}">
-                    Unit / Bidang
-                </a>
+                    @endif
 
-                <div class="menu-title">
-                    Transaksi
-                </div>
+                    <a href="{{ route('items.index') }}" class="{{ request()->routeIs('items.*') ? 'active' : '' }}">
+                        Barang
+                    </a>
 
-                <a href="{{ route('incoming-transactions.index') }}"
-                    class="{{ request()->routeIs('incoming-transactions.*') ? 'active' : '' }}">
-                    Barang Masuk
-                </a>
+                    <a href="{{ route('categories.index') }}"
+                        class="{{ request()->routeIs('categories.*') ? 'active' : '' }}">
+                        Kategori
+                    </a>
 
-                <a href="{{ route('outgoing-transactions.index') }}"
-                    class="{{ request()->routeIs('outgoing-transactions.*') ? 'active' : '' }}">
-                    Barang Keluar
-                </a>
+                    <a href="{{ route('units.index') }}" class="{{ request()->routeIs('units.*') ? 'active' : '' }}">
+                        Satuan
+                    </a>
 
+                    <a href="{{ route('warehouses.index') }}"
+                        class="{{ request()->routeIs('warehouses.*') ? 'active' : '' }}">
+                        Gudang
+                    </a>
+
+                    <a href="{{ route('suppliers.index') }}"
+                        class="{{ request()->routeIs('suppliers.*') ? 'active' : '' }}">
+                        Supplier
+                    </a>
+
+                    <a href="{{ route('departments.index') }}"
+                        class="{{ request()->routeIs('departments.*') ? 'active' : '' }}">
+                        Unit / Bidang
+                    </a>
+
+
+                    {{-- TRANSAKSI --}}
+                    <div class="menu-title">
+                        Transaksi
+                    </div>
+
+                    <a href="{{ route('incoming-transactions.index') }}"
+                        class="{{ request()->routeIs('incoming-transactions.*') ? 'active' : '' }}">
+                        Barang Masuk
+                    </a>
+
+                    <a href="{{ route('outgoing-transactions.index') }}"
+                        class="{{ request()->routeIs('outgoing-transactions.*') ? 'active' : '' }}">
+                        Barang Keluar
+                    </a>
+
+                @endif
+
+
+                {{-- LAPORAN --}}
+                {{-- Semua role dapat melihat laporan --}}
                 <div class="menu-title">
                     Laporan
                 </div>
 
-                <a href="{{ route('reports.stock') }}" class="{{ request()->routeIs('reports.*') ? 'active' : '' }}">
+                <a href="{{ route('reports.stock') }}"
+                    class="{{ request()->routeIs('reports.stock') ? 'active' : '' }}">
                     Laporan Stok
                 </a>
 
@@ -452,6 +478,68 @@
                     class="{{ request()->routeIs('reports.outgoing') ? 'active' : '' }}">
                     Barang Keluar
                 </a>
+
+
+                {{-- USER & LOGOUT --}}
+                <div style="
+            margin-top:30px;
+            padding-top:20px;
+            border-top:1px solid #334155;
+        ">
+
+                    <div style="
+                padding:0 16px;
+                margin-bottom:10px;
+                color:#cbd5e1;
+                font-size:13px;
+            ">
+                        {{ auth()->user()->name }}
+                    </div>
+
+                    <div style="
+                padding:0 16px;
+                margin-bottom:12px;
+                color:#94a3b8;
+                font-size:11px;
+                text-transform:uppercase;
+            ">
+                        {{ ucfirst(auth()->user()->role) }}
+                    </div>
+
+                    <a href="{{ route('profile.edit') }}" class="{{ request()->routeIs('profile.*') ? 'active' : '' }}"
+                        style="
+        display:block;
+        margin:0 10px 8px;
+        padding:10px 16px;
+        border-radius:8px;
+        color:#cbd5e1;
+        text-decoration:none;
+        font-size:14px;
+    ">
+                        Profile
+                    </a>
+
+                    <form action="{{ route('logout') }}" method="POST" style="padding:0 10px;">
+
+                        @csrf
+
+                        <button type="submit" style="
+                    width:100%;
+                    padding:10px 16px;
+                    border:none;
+                    border-radius:8px;
+                    background:#334155;
+                    color:#f8fafc;
+                    text-align:left;
+                    cursor:pointer;
+                    font-size:14px;
+                ">
+                            Logout
+                        </button>
+
+                    </form>
+
+                </div>
 
             </nav>
 
