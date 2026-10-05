@@ -62,7 +62,7 @@
             <div class="form-group" style="margin-bottom:0;">
 
                 <label for="supplier_id">
-                    Supplier
+                    Sumber Dana
                 </label>
 
                 <select
@@ -72,7 +72,7 @@
                 >
 
                     <option value="">
-                        Semua Supplier
+                        Semua Sumber Dana
                     </option>
 
                     @foreach($suppliers as $supplier)
@@ -162,9 +162,9 @@
                     <th>No</th>
                     <th>No. Transaksi</th>
                     <th>Tanggal</th>
-                    <th>Supplier</th>
+                    <th>Sumber Dana</th>
                     <th>Jumlah Item</th>
-                    <th>Aksi</th>
+                    <th class="no-print">Aksi</th>
                 </tr>
 
             </thead>
@@ -200,15 +200,28 @@
                             </span>
                         </td>
 
-                        <td>
+                        <td class="no-print">
+                            <div class="actions">
+                                <a
+                                    href="{{ route('incoming-transactions.show', $transaction->id) }}"
+                                    class="btn btn-detail"
+                                >
+                                    Detail
+                                </a>
 
-                            <a
-                                href="{{ route('incoming-transactions.show', $transaction->id) }}"
-                                class="btn btn-detail"
-                            >
-                                Detail
-                            </a>
-
+                                <form
+                                    action="{{ route('incoming-transactions.destroy', $transaction) }}"
+                                    method="POST"
+                                    data-confirm-message="Hapus transaksi barang masuk ini? Stok akan dikurangi sesuai jumlah pada transaksi."
+                                    onsubmit="return window.simlogConfirmEnabled ? true : confirm('Hapus transaksi barang masuk ini? Stok akan dikurangi sesuai jumlah pada transaksi.')"
+                                >
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">
+                                        Hapus
+                                    </button>
+                                </form>
+                            </div>
                         </td>
 
                     </tr>

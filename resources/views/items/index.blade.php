@@ -20,15 +20,6 @@
 
     </div>
 
-
-    @if(session('success'))
-
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-
-    @endif
-
     <div class="card" style="margin-bottom:20px;">
 
         <form action="{{ route('items.index') }}" method="GET">
@@ -78,7 +69,8 @@
                         <th>Nama Barang</th>
                         <th>Kategori</th>
                         <th>Satuan</th>
-                        <th>Gudang</th>
+                        <th>Sumber Dana</th>
+                        <th>Harga Satuan</th>
                         <th>Stok</th>
                         <th>Aksi</th>
                     </tr>
@@ -113,7 +105,11 @@
                             </td>
 
                             <td>
-                                {{ $item->warehouse->name ?? '-' }}
+                                {{ $item->supplier->name ?? '-' }}
+                            </td>
+
+                            <td>
+                                {{ $item->price !== null ? 'Rp ' . number_format((float) $item->price, 0, ',', '.') : '-' }}
                             </td>
 
                             <td>
@@ -143,7 +139,8 @@
                                     </a>
 
                                     <form action="{{ route('items.destroy', $item->id) }}" method="POST"
-                                        onsubmit="return confirm('Yakin ingin menghapus barang ini?')">
+                                        data-confirm-message="Hapus barang ini? Data yang sudah dihapus tidak dapat dikembalikan."
+                                        onsubmit="return window.simlogConfirmEnabled ? true : confirm('Hapus barang ini?')">
 
                                         @csrf
                                         @method('DELETE')
@@ -164,7 +161,7 @@
 
                         <tr>
 
-                            <td colspan="8" style="text-align:center; padding:40px;">
+                            <td colspan="9" style="text-align:center; padding:40px;">
                                 Belum ada data barang.
                             </td>
 

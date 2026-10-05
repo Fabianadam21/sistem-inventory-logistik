@@ -48,7 +48,7 @@
         </div>
 
 
-        <strong>Supplier</strong>
+        <strong>Sumber Dana</strong>
 
         <div>
             {{ $incomingTransaction->supplier->name ?? '-' }}

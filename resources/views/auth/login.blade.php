@@ -43,9 +43,14 @@
 
         .brand {
             text-align: center;
-            font-size: 30px;
-            font-weight: bold;
-            color: #1e293b;
+        }
+
+        .brand img {
+            display: block;
+            width: 88px;
+            height: 122px;
+            object-fit: contain;
+            margin: 0 auto;
         }
 
         .subtitle {
@@ -106,6 +111,31 @@
             font-size: 14px;
         }
 
+        .status {
+            background: #f0fdf4;
+            color: #166534;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .forgot-link {
+            display: block;
+            margin-top: 16px;
+            color: #762735;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .forgot-link:hover {
+            color: #541a25;
+            text-decoration: underline;
+        }
+
     </style>
 
 </head>
@@ -117,13 +147,18 @@
     <div class="login-card">
 
         <div class="brand">
-            SIMLOG
+            <img src="{{ asset('images/logo-pemkot.png') }}" alt="Logo Pemerintah Kota">
         </div>
 
         <div class="subtitle">
             Sistem Informasi Inventory Logistik
         </div>
 
+        @if (session('status'))
+            <div class="status" role="status">
+                {{ session('status') }}
+            </div>
+        @endif
 
         @if ($errors->any())
 
@@ -187,6 +222,14 @@
             </button>
 
         </form>
+
+        <a href="{{ route('password.request') }}" class="forgot-link">
+            Lupa sandi?
+        </a>
+
+        <a href="{{ route('register') }}" class="forgot-link">
+            Daftar akun baru
+        </a>
 
     </div>
 

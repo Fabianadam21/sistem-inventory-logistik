@@ -15,7 +15,7 @@ class ItemController extends Controller
         $query = Item::with([
             'category',
             'unit',
-            'warehouse'
+            'supplier'
         ]);
 
         if ($request->filled('search')) {
@@ -42,12 +42,12 @@ class ItemController extends Controller
     {
         $categories = \App\Models\Category::orderBy('name')->get();
         $units = \App\Models\Unit::orderBy('name')->get();
-        $warehouses = \App\Models\Warehouse::orderBy('name')->get();
+        $suppliers = \App\Models\Supplier::orderBy('name')->get();
 
         return view('items.create', compact(
             'categories',
             'units',
-            'warehouses'
+            'suppliers'
         ));
     }
 
@@ -61,7 +61,7 @@ class ItemController extends Controller
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'unit_id' => 'required|exists:units,id',
-            'warehouse_id' => 'required|exists:warehouses,id',
+            'supplier_id' => 'required|exists:suppliers,id',
             'stock' => 'required|integer|min:0',
             'minimum_stock' => 'required|integer|min:0',
             'price' => 'nullable|numeric|min:0',
@@ -90,13 +90,13 @@ class ItemController extends Controller
     {
         $categories = \App\Models\Category::orderBy('name')->get();
         $units = \App\Models\Unit::orderBy('name')->get();
-        $warehouses = \App\Models\Warehouse::orderBy('name')->get();
+        $suppliers = \App\Models\Supplier::orderBy('name')->get();
 
         return view('items.edit', compact(
             'item',
             'categories',
             'units',
-            'warehouses'
+            'suppliers'
         ));
     }
 
@@ -110,7 +110,7 @@ class ItemController extends Controller
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'unit_id' => 'required|exists:units,id',
-            'warehouse_id' => 'required|exists:warehouses,id',
+            'supplier_id' => 'required|exists:suppliers,id',
             'stock' => 'required|integer|min:0',
             'minimum_stock' => 'required|integer|min:0',
             'price' => 'nullable|numeric|min:0',
@@ -129,6 +129,12 @@ class ItemController extends Controller
      */
     public function destroy(Item $item)
     {
+        if ($item->incomingDetails()->exists() || $item->outgoingDetails()->exists()) {
+            return redirect()
+                ->route('items.index')
+                ->with('error', 'Barang tidak dapat dihapus karena sudah digunakan dalam transaksi.');
+        }
+
         $item->delete();
 
         return redirect()

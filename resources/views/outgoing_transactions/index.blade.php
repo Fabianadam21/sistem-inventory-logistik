@@ -20,24 +20,6 @@
 
     </div>
 
-
-    @if(session('success'))
-
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-
-    @endif
-
-
-    @if(session('error'))
-
-        <div class="alert alert-error">
-            {{ session('error') }}
-        </div>
-
-    @endif
-
     <div class="card" style="margin-bottom:20px;">
 
         <form action="{{ route('outgoing-transactions.index') }}" method="GET">
@@ -129,6 +111,17 @@
                                         class="btn btn-detail">
                                         Detail
                                     </a>
+
+                                    <form action="{{ route('outgoing-transactions.destroy', $transaction) }}"
+                                        method="POST"
+                                        data-confirm-message="Hapus transaksi barang keluar ini? Stok akan dikembalikan sesuai jumlah pada transaksi."
+                                        onsubmit="return window.simlogConfirmEnabled ? true : confirm('Hapus transaksi barang keluar ini? Stok akan dikembalikan sesuai jumlah pada transaksi.')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">
+                                            Hapus
+                                        </button>
+                                    </form>
 
                                 </div>
 

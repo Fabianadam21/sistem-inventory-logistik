@@ -7,7 +7,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UnitController;
-use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\IncomingTransactionController;
@@ -29,6 +28,24 @@ Route::middleware('guest')->group(function () {
 
     Route::post('/login', [AuthController::class, 'login'])
         ->name('login.process');
+
+    Route::get('/register', [AuthController::class, 'showRegistration'])
+        ->name('register');
+
+    Route::post('/register', [AuthController::class, 'register'])
+        ->name('register.store');
+
+    Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])
+        ->name('password.request');
+
+    Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])
+        ->name('password.email');
+
+    Route::get('/reset-password/{token}', [AuthController::class, 'showResetPassword'])
+        ->name('password.reset');
+
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])
+        ->name('password.update');
 
 });
 
@@ -100,7 +117,6 @@ Route::middleware('auth')->group(function () {
         Route::resource('items', ItemController::class);
         Route::resource('categories', CategoryController::class);
         Route::resource('units', UnitController::class);
-        Route::resource('warehouses', WarehouseController::class);
         Route::resource('suppliers', SupplierController::class);
         Route::resource('departments', DepartmentController::class);
 

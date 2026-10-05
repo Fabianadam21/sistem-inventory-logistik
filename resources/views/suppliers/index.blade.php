@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Supplier')
+@section('title', 'Sumber Dana')
 
 @section('content')
 
 <div class="page-header">
 
     <div>
-        <h1>Supplier</h1>
+        <h1>Sumber Dana</h1>
 
         <div class="subtitle">
-            Kelola data supplier barang
+            Kelola data sumber dana barang
         </div>
     </div>
 
@@ -18,22 +18,10 @@
         href="{{ route('suppliers.create') }}"
         class="btn btn-primary"
     >
-        + Tambah Supplier
+        + Tambah Sumber Dana
     </a>
 
 </div>
-
-@if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
-@if(session('error'))
-    <div class="alert alert-error">
-        {{ session('error') }}
-    </div>
-@endif
 
 <div class="card">
 
@@ -44,7 +32,7 @@
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Nama Supplier</th>
+                    <th>Nama Sumber Dana</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -77,7 +65,8 @@
                                 <form
                                     action="{{ route('suppliers.destroy', $supplier->id) }}"
                                     method="POST"
-                                    onsubmit="return confirm('Yakin ingin menghapus supplier ini?')"
+                                    data-confirm-message="Hapus sumber dana ini? Data yang sudah dihapus tidak dapat dikembalikan."
+                                    onsubmit="return window.simlogConfirmEnabled ? true : confirm('Hapus sumber dana ini?')"
                                 >
 
                                     @csrf
@@ -105,7 +94,7 @@
                             colspan="3"
                             style="text-align:center; padding:40px;"
                         >
-                            Belum ada data supplier.
+                            Belum ada data sumber dana.
                         </td>
                     </tr>
 

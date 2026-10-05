@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Supplier')
+@section('title', 'Edit Sumber Dana')
 
 @section('content')
 
 <div class="page-header">
 
     <div>
-        <h1>Edit Supplier</h1>
+        <h1>Edit Sumber Dana</h1>
 
         <div class="subtitle">
-            Perbarui informasi supplier
+            Perbarui informasi sumber dana
         </div>
     </div>
 
@@ -52,7 +52,7 @@
         <div class="form-group">
 
             <label for="name">
-                Nama Supplier
+                Nama Sumber Dana
             </label>
 
             <input

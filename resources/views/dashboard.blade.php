@@ -2,68 +2,120 @@
 
 @section('title', 'Dashboard')
 
-@section('content')
-
-    <!DOCTYPE html>
-    <html lang="id">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-        <title>Dashboard SIMLOG</title>
-
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background: #f5f7fb;
-                margin: 0;
-                padding: 30px;
-            }
-
-            .container {
+@push('styles')
+<style>
+            .dashboard-shell {
                 max-width: 1200px;
-                margin: auto;
+                margin: 0 auto;
             }
 
-            h1 {
-                margin-bottom: 5px;
-                color: #1f2937;
+            .page-intro {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 24px;
+                margin-bottom: 22px;
             }
 
-            .subtitle {
-                color: #6b7280;
-                margin-bottom: 25px;
+            .page-intro-copy {
+                min-width: 0;
+            }
+
+            .page-title {
+                margin: 0;
+                color: #172033;
+                font-size: 28px;
+                line-height: 1.2;
+                font-weight: 700;
+            }
+
+            .page-subtitle {
+                margin: 8px 0 0;
+                color: #475569;
+                font-size: 15px;
+                font-weight: 400;
+            }
+
+            .page-logo {
+                display: block;
+                flex: 0 0 auto;
+                width: 56px;
+                height: 78px;
+                object-fit: contain;
+            }
+
+            .chart-card {
+                background: white;
+                border: 1px solid #d8e0e9;
+                border-radius: 10px;
+                padding: 22px 22px 18px;
+                box-shadow: 0 1px 3px rgba(15, 23, 42, .04);
+                margin-bottom: 24px;
+            }
+
+            .chart-card-header {
+                margin-bottom: 18px;
+            }
+
+            .chart-card h3 {
+                margin: 0;
+                font-size: 18px;
+                color: #172033;
+            }
+
+            .chart-card .subtitle {
+                margin: 8px 0 0;
+                color: #475569;
+                font-size: 14px;
+                line-height: 1.5;
             }
 
             .cards {
                 display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 20px;
-                margin-bottom: 25px;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap: 16px;
+                margin-bottom: 24px;
             }
 
-            .card {
+            .stat-card {
                 background: white;
-                padding: 22px;
+                border: 1px solid #d8e0e9;
                 border-radius: 10px;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                padding: 18px 18px 16px;
+                box-shadow: 0 1px 3px rgba(15, 23, 42, .04);
             }
 
             .card-title {
-                color: #6b7280;
-                font-size: 14px;
+                color: #475569;
+                font-size: 13px;
+                font-weight: 600;
                 margin-bottom: 10px;
             }
 
             .card-value {
                 font-size: 28px;
-                font-weight: bold;
-                color: #1f2937;
+                font-weight: 700;
+                line-height: 1.2;
+                color: #0f172a;
+                letter-spacing: -.02em;
             }
 
             .section {
-                margin-bottom: 25px;
+                margin-bottom: 24px;
+            }
+
+            .panel-table {
+                background: white;
+                border: 1px solid #d8e0e9;
+                border-radius: 10px;
+                padding: 20px;
+                box-shadow: 0 1px 3px rgba(15, 23, 42, .04);
+            }
+
+            .panel-table h3 {
+                margin: 0 0 14px;
+                color: #172033;
+                font-size: 18px;
             }
 
             table {
@@ -73,54 +125,95 @@
 
             th,
             td {
-                padding: 12px;
-                border-bottom: 1px solid #e5e7eb;
+                padding: 12px 10px;
+                border-bottom: 1px solid #dbe2ea;
                 text-align: left;
+                vertical-align: middle;
             }
 
             th {
-                background: #f9fafb;
+                background: #f1f5f9;
+                color: #334155;
+                font-size: 12px;
+                font-weight: 700;
+                letter-spacing: .02em;
+                text-transform: uppercase;
+            }
+
+            td {
+                color: #263445;
+                font-size: 14px;
+            }
+
+            tbody tr:hover {
+                background: #f5f7fa;
             }
 
             .warning {
-                color: #dc2626;
-                font-weight: bold;
+                color: #b91c1c;
+                font-weight: 700;
             }
 
             .grid {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
-                gap: 20px;
+                gap: 16px;
             }
-        </style>
-    </head>
 
-    <body>
+            @media (max-width: 900px) {
+                .cards {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                }
+            }
 
-        <div class="container">
+            @media (max-width: 640px) {
+                .cards,
+                .grid {
+                    grid-template-columns: 1fr;
+                }
 
-            <h1>Dashboard SIMLOG</h1>
+                .page-title {
+                    font-size: 24px;
+                }
 
-            <div class="subtitle">
-                Sistem Informasi Inventory Logistik
+                .page-intro {
+                    gap: 14px;
+                }
+
+                .page-logo {
+                    width: 42px;
+                    height: 60px;
+                }
+            }
+    </style>
+@endpush
+
+@section('content')
+
+        <div class="dashboard-shell">
+
+            <div class="page-intro">
+                <div class="page-intro-copy">
+                    <h1 class="page-title">Ringkasan Inventory</h1>
+                    <p class="page-subtitle">Selamat datang kembali, Administrator. Berikut ringkasan kondisi inventory saat ini.</p>
+                </div>
+                <img
+                    class="page-logo"
+                    src="{{ asset('images/logo-pemkot.png') }}"
+                    alt="Logo Pemerintah Kota"
+                >
             </div>
 
-            <div class="card" style="margin-bottom:25px;">
+            <div class="chart-card">
 
-                <div style="margin-bottom:20px;">
-
-                    <h3 style="margin:0;">
-                        Grafik Transaksi
-                    </h3>
-
+                <div class="chart-card-header">
+                    <h3>Grafik Transaksi</h3>
                     <div class="subtitle">
-                        Perbandingan transaksi Barang Masuk dan Barang Keluar
-                        selama 6 bulan terakhir
+                        Perbandingan transaksi Barang Masuk dan Barang Keluar selama 6 bulan terakhir
                     </div>
-
                 </div>
 
-                <div style="height:350px;">
+                <div style="height:330px;">
                     <canvas id="transactionChart"></canvas>
                 </div>
 
@@ -128,7 +221,7 @@
 
             <div class="cards">
 
-                <div class="card">
+                <div class="stat-card">
                     <div class="card-title">
                         Total Jenis Barang
                     </div>
@@ -138,7 +231,7 @@
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="stat-card">
                     <div class="card-title">
                         Total Stok
                     </div>
@@ -148,7 +241,7 @@
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="stat-card">
                     <div class="card-title">
                         Transaksi Barang Masuk
                     </div>
@@ -158,7 +251,7 @@
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="stat-card">
                     <div class="card-title">
                         Transaksi Barang Keluar
                     </div>
@@ -172,7 +265,7 @@
 
             <div class="section">
 
-                <div class="card">
+                <div class="panel-table">
 
                     <h3>Stok Menipis</h3>
 
@@ -224,7 +317,7 @@
 
             <div class="grid">
 
-                <div class="card">
+                <div class="panel-table">
 
                     <h3>Barang Masuk Terbaru</h3>
 
@@ -233,7 +326,7 @@
                         <thead>
                             <tr>
                                 <th>No. Transaksi</th>
-                                <th>Supplier</th>
+                                <th>Sumber Dana</th>
                                 <th>Tanggal</th>
                             </tr>
                         </thead>
@@ -272,7 +365,7 @@
 
                 </div>
 
-                <div class="card">
+                <div class="panel-table">
 
                     <h3>Barang Keluar Terbaru</h3>
 
@@ -324,10 +417,6 @@
 
         </div>
 
-    </body>
-
-    </html>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
@@ -347,7 +436,7 @@
 
         new Chart(ctx, {
 
-            type: 'line',
+            type: 'bar',
 
             data: {
 
@@ -358,17 +447,23 @@
                     {
                         label: 'Barang Masuk',
                         data: incomingChartData,
-                        tension: 0.3,
-                        borderWidth: 2,
-                        fill: false
+                        backgroundColor: '#3478e5',
+                        borderColor: '#245fbd',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        borderSkipped: false,
+                        maxBarThickness: 26
                     },
 
                     {
                         label: 'Barang Keluar',
                         data: outgoingChartData,
-                        tension: 0.3,
-                        borderWidth: 2,
-                        fill: false
+                        backgroundColor: '#bd4d59',
+                        borderColor: '#963844',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        borderSkipped: false,
+                        maxBarThickness: 26
                     }
 
                 ]
@@ -389,17 +484,37 @@
                 plugins: {
 
                     legend: {
-                        display: true
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            pointStyle: 'rect',
+                            padding: 16,
+                            color: '#263445'
+                        }
                     }
 
                 },
 
                 scales: {
 
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: '#475569'
+                        }
+                    },
+
                     y: {
                         beginAtZero: true,
+                        grid: {
+                            color: '#d8e0e9'
+                        },
                         ticks: {
-                            precision: 0
+                            precision: 0,
+                            color: '#475569'
                         }
                     }
 

@@ -131,6 +131,36 @@ class OutgoingTransactionController extends Controller
 
     public function destroy(OutgoingTransaction $outgoingTransaction)
     {
-        //
+        DB::transaction(function () use ($outgoingTransaction) {
+            $transaction = OutgoingTransaction::query()
+                ->whereKey($outgoingTransaction->getKey())
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            $quantitiesByItem = $transaction->details()
+                ->select('item_id')
+                ->selectRaw('SUM(quantity) as quantity')
+                ->groupBy('item_id')
+                ->orderBy('item_id')
+                ->get();
+
+            $items = Item::query()
+                ->whereIn('id', $quantitiesByItem->pluck('item_id'))
+                ->orderBy('id')
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('id');
+
+            foreach ($quantitiesByItem as $itemQuantity) {
+                $items->get($itemQuantity->item_id)
+                    ->increment('stock', $itemQuantity->quantity);
+            }
+
+            $transaction->delete();
+        });
+
+        return redirect()
+            ->route('outgoing-transactions.index')
+            ->with('success', 'Transaksi barang keluar berhasil dihapus dan stok telah dikembalikan.');
     }
 }

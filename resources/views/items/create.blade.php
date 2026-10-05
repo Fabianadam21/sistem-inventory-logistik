@@ -154,28 +154,28 @@
 
         <div class="form-group">
 
-            <label for="warehouse_id">
-                Gudang
+            <label for="supplier_id">
+                Sumber Dana
             </label>
 
             <select
-                id="warehouse_id"
-                name="warehouse_id"
+                id="supplier_id"
+                name="supplier_id"
                 class="form-control"
                 required
             >
 
                 <option value="">
-                    -- Pilih Gudang --
+                    -- Pilih Sumber Dana --
                 </option>
 
-                @foreach($warehouses as $warehouse)
+                @foreach($suppliers as $supplier)
 
                     <option
-                        value="{{ $warehouse->id }}"
-                        {{ old('warehouse_id') == $warehouse->id ? 'selected' : '' }}
+                        value="{{ $supplier->id }}"
+                        {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}
                     >
-                        {{ $warehouse->name }}
+                        {{ $supplier->name }}
                     </option>
 
                 @endforeach

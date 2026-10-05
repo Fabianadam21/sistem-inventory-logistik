@@ -61,6 +61,8 @@ class IncomingTransactionController extends Controller
             'items.*.quantity' => 'required|integer|min:1',
 
             'items.*.price' => 'nullable|numeric|min:0',
+        ], [], [
+            'supplier_id' => 'sumber dana',
         ]);
 
         DB::transaction(function () use ($validated) {
@@ -126,6 +128,52 @@ class IncomingTransactionController extends Controller
 
     public function destroy(IncomingTransaction $incomingTransaction)
     {
-        //
+        $deleted = DB::transaction(function () use ($incomingTransaction) {
+            $transaction = IncomingTransaction::query()
+                ->whereKey($incomingTransaction->getKey())
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            $quantitiesByItem = $transaction->details()
+                ->select('item_id')
+                ->selectRaw('SUM(quantity) as quantity')
+                ->groupBy('item_id')
+                ->orderBy('item_id')
+                ->get();
+
+            $items = Item::query()
+                ->whereIn('id', $quantitiesByItem->pluck('item_id'))
+                ->orderBy('id')
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('id');
+
+            foreach ($quantitiesByItem as $itemQuantity) {
+                $item = $items->get($itemQuantity->item_id);
+
+                if (!$item || $item->stock < $itemQuantity->quantity) {
+                    return false;
+                }
+            }
+
+            foreach ($quantitiesByItem as $itemQuantity) {
+                $items->get($itemQuantity->item_id)
+                    ->decrement('stock', $itemQuantity->quantity);
+            }
+
+            $transaction->delete();
+
+            return true;
+        });
+
+        if (!$deleted) {
+            return redirect()
+                ->route('incoming-transactions.index')
+                ->with('error', 'Transaksi barang masuk tidak dapat dihapus karena stok dari transaksi tersebut sudah digunakan.');
+        }
+
+        return redirect()
+            ->route('incoming-transactions.index')
+            ->with('success', 'Transaksi barang masuk berhasil dihapus dan stok telah disesuaikan.');
     }
 }

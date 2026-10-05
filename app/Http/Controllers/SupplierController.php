@@ -29,7 +29,7 @@ class SupplierController extends Controller
 
         return redirect()
             ->route('suppliers.index')
-            ->with('success', 'Supplier berhasil ditambahkan.');
+            ->with('success', 'Sumber dana berhasil ditambahkan.');
     }
 
     public function edit(Supplier $supplier)
@@ -47,7 +47,7 @@ class SupplierController extends Controller
 
         return redirect()
             ->route('suppliers.index')
-            ->with('success', 'Supplier berhasil diperbarui.');
+            ->with('success', 'Sumber dana berhasil diperbarui.');
     }
 
     public function destroy(Supplier $supplier)
@@ -55,13 +55,13 @@ class SupplierController extends Controller
         if ($supplier->incomingTransactions()->exists()) {
             return redirect()
                 ->route('suppliers.index')
-                ->with('error', 'Supplier tidak dapat dihapus karena sudah digunakan dalam transaksi Barang Masuk.');
+                ->with('error', 'Sumber dana tidak dapat dihapus karena sudah digunakan dalam transaksi Barang Masuk.');
         }
 
         $supplier->delete();
 
         return redirect()
             ->route('suppliers.index')
-            ->with('success', 'Supplier berhasil dihapus.');
+            ->with('success', 'Sumber dana berhasil dihapus.');
     }
 }

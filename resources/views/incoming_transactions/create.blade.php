@@ -102,7 +102,7 @@
         <div class="form-group">
 
             <label for="supplier_id">
-                Supplier
+                Sumber Dana
             </label>
 
             <select
@@ -113,7 +113,7 @@
             >
 
                 <option value="">
-                    -- Pilih Supplier --
+                    -- Pilih Sumber Dana --
                 </option>
 
                 @foreach ($suppliers as $supplier)

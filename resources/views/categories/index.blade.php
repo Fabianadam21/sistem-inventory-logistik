@@ -23,12 +23,6 @@
 
 </div>
 
-@if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
 <div class="card">
 
     <div class="table-wrapper">
@@ -70,7 +64,8 @@
                                 <form
                                     action="{{ route('categories.destroy', $category->id) }}"
                                     method="POST"
-                                    onsubmit="return confirm('Yakin ingin menghapus kategori ini?')"
+                                    data-confirm-message="Hapus kategori ini? Data yang sudah dihapus tidak dapat dikembalikan."
+                                    onsubmit="return window.simlogConfirmEnabled ? true : confirm('Hapus kategori ini?')"
                                 >
 
                                     @csrf

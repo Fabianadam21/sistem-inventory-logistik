@@ -164,7 +164,7 @@
                     <th>Tanggal</th>
                     <th>Unit / Bidang</th>
                     <th>Jumlah Item</th>
-                    <th>Aksi</th>
+                    <th class="no-print">Aksi</th>
                 </tr>
 
             </thead>
@@ -200,15 +200,28 @@
                             </span>
                         </td>
 
-                        <td>
+                        <td class="no-print">
+                            <div class="actions">
+                                <a
+                                    href="{{ route('outgoing-transactions.show', $transaction->id) }}"
+                                    class="btn btn-detail"
+                                >
+                                    Detail
+                                </a>
 
-                            <a
-                                href="{{ route('outgoing-transactions.show', $transaction->id) }}"
-                                class="btn btn-detail"
-                            >
-                                Detail
-                            </a>
-
+                                <form
+                                    action="{{ route('outgoing-transactions.destroy', $transaction) }}"
+                                    method="POST"
+                                    data-confirm-message="Hapus transaksi barang keluar ini? Stok akan dikembalikan sesuai jumlah pada transaksi."
+                                    onsubmit="return window.simlogConfirmEnabled ? true : confirm('Hapus transaksi barang keluar ini? Stok akan dikembalikan sesuai jumlah pada transaksi.')"
+                                >
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">
+                                        Hapus
+                                    </button>
+                                </form>
+                            </div>
                         </td>
 
                     </tr>

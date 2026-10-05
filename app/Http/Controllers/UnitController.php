@@ -57,6 +57,16 @@ class UnitController extends Controller
 
     public function destroy(Unit $unit)
     {
-        //
+        if ($unit->items()->exists()) {
+            return redirect()
+                ->route('units.index')
+                ->with('error', 'Satuan tidak dapat dihapus karena masih digunakan oleh data barang.');
+        }
+
+        $unit->delete();
+
+        return redirect()
+            ->route('units.index')
+            ->with('success', 'Satuan berhasil dihapus.');
     }
 }

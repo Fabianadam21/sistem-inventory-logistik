@@ -23,18 +23,6 @@
 
 </div>
 
-@if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
-@if(session('error'))
-    <div class="alert alert-error">
-        {{ session('error') }}
-    </div>
-@endif
-
 <div class="card">
 
     <div class="table-wrapper">
@@ -77,7 +65,8 @@
                                 <form
                                     action="{{ route('departments.destroy', $department->id) }}"
                                     method="POST"
-                                    onsubmit="return confirm('Yakin ingin menghapus Unit/Bidang ini?')"
+                                    data-confirm-message="Hapus Unit/Bidang ini? Data yang sudah dihapus tidak dapat dikembalikan."
+                                    onsubmit="return window.simlogConfirmEnabled ? true : confirm('Hapus Unit/Bidang ini?')"
                                 >
 
                                     @csrf
